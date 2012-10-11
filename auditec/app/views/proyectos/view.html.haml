@@ -1,0 +1,63 @@
+%h2 Auditec
+
+= form_tag proyectos_path, :method => :get do
+
+  = text_field :cadena, ''
+  = submit_tag 'Buscar'
+
+= form_tag "#{@proyecto.id.eql?(nil)?'/proyectos/create':'/proyectos/'+@proyecto.id.to_s+'/edit'}", :method => :get do
+  = label :lbcodigo, 'Codigo'
+  = text_field_tag "codigo", @proyecto.codigo
+  = label :lbnombre, 'Nombre'
+  = text_field_tag "nombre", @proyecto.nombre
+  = label :lbresponsable, 'Responsable'
+  = text_field_tag "responsable", @proyecto.responsable
+  = label :lbpuntos, "Puntos #{@proyecto.nota}"
+  = submit_tag "#{@proyecto.id.eql?(nil)?'Annadir':'Modificar'}"
+
+%table#puntos
+  %thead
+    %tr
+      %th Nombre    
+      %th Tipo
+      %th Fecha
+      %th Tiempo     
+      %th Puntuacion         
+      %th Detalle
+  %tbody
+    - @puntos.each do |punto|
+      %tr
+        = form_tag "/proyectos/#{punto.proyecto_id}/#{punto.id}/edit", :method => :get do      
+          %td= text_field_tag "nombre", punto.nombre 
+          %td= @tipopuntos[punto.tipopunto_id].nombre
+          %td= punto.fecha
+          %td= text_field_tag "tiempo", punto.tiempo 
+          %td= punto.nota
+          %td= submit_tag "Modificar", :name => 'modificar'       
+          %td= link_to "#{punto.aspectos.size.eql?(0)?'Crear':'Ver'}", "#{punto.aspectos.size.eql?(0)?'/proyectos/'+punto.proyecto_id.to_s+'/'+punto.id.to_s+'/createA':'/proyectos/'+punto.proyecto_id.to_s+'/'+punto.id.to_s}"
+          %td= link_to 'Eliminar', "/proyectos/#{punto.proyecto_id}/#{punto.id}/delete"
+
+    %tr
+      = form_tag "/proyectos/#{@proyecto.id}", :method => :get do
+        %td= text_field :nombre, ''
+        %td= select_tag 'npunto', options_from_collection_for_select(@tipopuntos.values, 'id', 'nombre')
+        %td= date_select 'npuntofecha','',:order=>[:day,:month,:year]        
+        %td= submit_tag "Annadir", :name => 'bnpunto'
+
+%table#aspectos
+  %thead
+    %tr
+      %th Nombre
+      %th Valor
+      %th Accion
+      %th Justificacion      
+      %th Accion      
+  %tbody
+    - @aspectos.each do |aspecto|
+      %tr
+        = form_tag "/proyectos/#{@punto.proyecto_id}/#{@punto.id}/#{aspecto.id}/edit", :method => :get do
+          %td= aspecto.nombre 
+          %td= check_box_tag aspecto.id, aspecto.id, aspecto.valor, :disabled => true
+          %td= link_to 'Cambiar', "/proyectos/#{@punto.proyecto_id}/#{@punto.id}/#{aspecto.id}/edit"      
+          %td= text_area_tag "justificacion", aspecto.justificacion 
+          %td= submit_tag "Modificar", :name => 'baspecto'

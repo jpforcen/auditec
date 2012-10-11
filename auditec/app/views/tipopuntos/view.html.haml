@@ -1,0 +1,46 @@
+%h2 Auditec
+
+%table#tipopuntos
+  %thead
+    %tr
+      %th Nombre
+      %th Tiempo Medio      
+      %th Accion    
+      %th Accion  
+      %th Accion                
+  %tbody
+    - @tipopuntos.each do |tipopunto|
+      %tr
+        = form_tag "/tipopuntos/#{tipopunto.id}/edit", :method => :get do
+          %td= text_field_tag "nombre",tipopunto.nombre  
+          %td= label :tiempo, tipopunto.tiempo
+          %td= submit_tag "Modificar"
+          %td= link_to 'Eliminar', "/tipopuntos/#{tipopunto.id}/delete"    
+          %td= link_to 'Ver',   "/tipopuntos/#{tipopunto.id}"                   
+      
+    %tr
+      = form_tag "/tipopuntos", :method => :get do
+        %td= text_field 'ntipopunto',''
+        %td= submit_tag "Annadir", :name => 'bntipopunto'
+      
+%table#tipoaspectos
+  %thead
+    %tr
+      %th Nombre
+      %th Peso      
+      %th Accion    
+      %th Accion        
+  %tbody
+    - @tipoaspectos.each do |tipoaspecto|
+      %tr 
+        = form_tag "/tipopuntos/#{@tipopunto_id}/#{tipoaspecto.id}/edit", :method => :get do
+          %td= text_field_tag "nombre",tipoaspecto.nombre  
+          %td= text_field_tag "peso",tipoaspecto.peso  
+          %td= submit_tag "Modificar"
+          %td= link_to 'Eliminar', "/tipopuntos/#{@tipopunto_id}/#{tipoaspecto.id}/delete"            
+       
+    %tr
+      = form_tag "/tipopuntos/#{@tipopunto_id}", :method => :get do
+        %td= text_field 'ntipoaspecto',''
+        %td= text_field 'npeso',''
+        %td= submit_tag "Annadir", :name => 'bntipoaspecto'      

@@ -1,0 +1,19 @@
+class Proyecto < ActiveRecord::Base
+	has_many :puntos, :dependent => :destroy
+  
+  def nota
+	  puntospunto = 0.0
+	  numpuntos = 0
+	  puntos.each do |x| 
+	  	if(!x.nota.eql?('-'))then
+	  	   puntospunto = puntospunto + x.nota.to_f
+	  	   numpuntos = numpuntos + 1 
+	  	end
+	  end
+	  if(puntos.size.eql?(0) or numpuntos.eql?(0))then
+	     return '-'
+	  else
+	     return "%2.2f" % [puntospunto / numpuntos]
+	  end
+  end	
+end

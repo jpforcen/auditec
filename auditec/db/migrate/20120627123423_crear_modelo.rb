@@ -1,0 +1,44 @@
+class CrearModelo < ActiveRecord::Migration
+  def up
+    create_table 'proyectos' do |t|
+      t.string 'codigo'
+      t.string 'nombre'
+      t.string 'responsable'
+      t.timestamps
+    end
+    create_table 'puntos' do |t|
+      t.integer 'proyecto_id'
+      t.integer 'tipopunto_id'      
+      t.string 'nombre'
+      t.date 'fecha'
+      t.float 'tiempo'      
+      t.timestamps
+    end    
+    create_table 'aspectos' do |t|
+      t.integer 'punto_id'
+      t.integer 'tipoaspecto_id'      
+      t.string 'nombre'
+      t.boolean 'valor'
+      t.string 'peso'
+      t.string 'justificacion'
+      t.timestamps
+    end    
+    create_table 'tipopuntos' do |t|
+      t.string 'nombre'
+      t.timestamps
+    end    
+    create_table 'tipoaspectos' do |t|
+      t.integer 'tipopunto_id'
+      t.string 'nombre'
+      t.string 'peso'
+      t.timestamps
+    end             
+  end
+  def down
+     drop_table 'tipoaspectos' 
+     drop_table 'tipopuntos'   
+     drop_table 'aspectos' 
+     drop_table 'puntos' 
+     drop_table 'proyectos' 
+  end
+end

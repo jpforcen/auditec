@@ -1,0 +1,36 @@
+%h2 Auditec
+
+= form_tag proyectos_path, :method => :get do
+
+  = text_field :cadena, params[:cadena]
+  = submit_tag 'Buscar'
+
+= label :codigo, @proyecto.codigo
+= label :nombre, @proyecto.nombre
+= label :responsable, @proyecto.responsable
+
+%table#puntos
+  %thead
+    %tr
+      %th Nombre
+      %th Fecha
+      %th Detalle
+  %tbody
+    - @puntos.each do |punto|
+      %tr
+        %td= punto.nombre 
+        %td= punto.fecha
+        %td= link_to 'Ver', edit_punto_path(punto)
+
+%table#aspectos
+  %thead
+    %tr
+      %th Nombre
+      %th Valor
+      %th Detalle
+  %tbody
+    - @aspectos.each do |aspecto|
+      %tr
+        %td= aspecto.nombre 
+        %td= check_box_tag aspecto.id, aspecto.id, aspecto.valor
+        %td= link_to 'Cambiar', edit_aspecto_path(aspecto)
